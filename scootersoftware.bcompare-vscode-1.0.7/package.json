@@ -1,0 +1,452 @@
+{
+	"name": "bcompare-vscode",
+	"displayName": "Beyond Compare",
+	"description": "Launch Beyond Compare with comparisons of files, folders, clipboards, and git repositories",
+	"version": "1.0.7",
+	"publisher": "ScooterSoftware",
+	"contributors": [
+		"Cal Shucha",
+		{
+			"name": "Scooter Software",
+			"email": "support@scootersoftware.com",
+			"url": "https://www.scootersoftware.com/"
+		}
+	],
+	"icon": "./images/Logo.png",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ScooterSoftware/bcompare-vscode"
+	},
+	"keywords": [
+		"compare",
+		"diff",
+		"git",
+		"clipboard"
+	],
+	"qna": "https://forum.scootersoftware.com/",
+	"bugs": {
+		"url": "https://github.com/ScooterSoftware/bcompare-vscode/issues"
+	},
+	"homepage": "https://github.com/ScooterSoftware/bcompare-vscode",
+	"engines": {
+		"vscode": "^1.83.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"extensionKind": [
+		"ui"
+	],
+	"main": "./out/extension.js",
+	"capabilities": {
+		"virtualWorkspaces": {
+			"supported": "limited",
+			"description": "Some types of virtual documents can not be opened in Beyond Compare"
+		},
+		"untrustedWorkspaces": {
+			"supported": true
+		}
+	},
+	"contributes": {
+		"commands": [
+			{
+				"command": "bcompare-vscode.launchBC",
+				"title": "Launch Beyond Compare",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.selectLeft",
+				"title": "Select Left File",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareWithLeft",
+				"title": "Compare to Left File",
+				"category": "Beyond Compare",
+				"enablement": "bcompare-vscode.leftSelected"
+			},
+			{
+				"command": "bcompare-vscode.selectLeftFolder",
+				"title": "Select Left Folder",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareWithLeftFolder",
+				"title": "Compare to Left Folder",
+				"category": "Beyond Compare",
+				"enablement": "bcompare-vscode.leftFolderSelected"
+			},
+			{
+				"command": "bcompare-vscode.compareWithFile",
+				"title": "Compare to File...",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareWithFolder",
+				"title": "Compare to Folder...",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareParent",
+				"title": "Compare Parent to Folder...",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareWithSave",
+				"title": "Compare to Last Save",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.selectLeftText",
+				"title": "Select Highlighted Text as Left File",
+				"category": "Beyond Compare",
+				"enablement": "editorHasSelection"
+			},
+			{
+				"command": "bcompare-vscode.compareWithLeftText",
+				"title": "Compare Highlighted Text with Left File",
+				"category": "Beyond Compare",
+				"enablement": "editorHasSelection && bcompare-vscode.leftSelected"
+			},
+			{
+				"command": "bcompare-vscode.gitCompare",
+				"title": "Compare to git with BC",
+				"enablement": "scmProvider == git"
+			},
+			{
+				"command": "bcompare-vscode.openFromDiff",
+				"title": "Open Diff in Beyond Compare",
+				"enablement": "isInDiffEditor",
+				"category": "Beyond Compare",
+				"icon": {
+					"light": "./images/VSCode_BCLogo_Mono_Light.svg",
+					"dark": "./images/VSCode_BCLogo_Mono_Dark.svg"
+				}
+			},
+			{
+				"command": "bcompare-vscode.mergeSelected",
+				"title": "Merge Selected Items",
+				"enablement": "listMultiSelection === true && listDoubleSelection === false && false",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareSelected",
+				"title": "Compare Selected Items",
+				"enablement": "listDoubleSelection === true",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareFileToClipboard",
+				"title": "Compare to Clipboard Contents",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareTextToClipboard",
+				"title": "Compare Text to Clipboard Contents",
+				"category": "Beyond Compare",
+				"enablement": "editorHasSelection"
+			},
+			{
+				"command": "bcompare-vscode.selectLeftExplorer",
+				"title": "Select Left File",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareWithLeftExplorer",
+				"title": "Compare to Left File",
+				"category": "Beyond Compare",
+				"enablement": "bcompare-vscode.leftSelected"
+			},
+			{
+				"command": "bcompare-vscode.compareWithFileExplorer",
+				"title": "Compare to File...",
+				"category": "Beyond Compare"
+			},
+			{
+				"command": "bcompare-vscode.compareParentExplorer",
+				"title": "Compare Parent to Folder...",
+				"category": "Beyond Compare"
+			}
+		],
+		"submenus": [
+			{
+				"id": "editorTitleContextCompare",
+				"label": "Beyond Compare"
+			},
+			{
+				"id": "explorerContextCompare",
+				"label": "Beyond Compare"
+			},
+			{
+				"id": "explorerMultiContextCompare",
+				"label": "Beyond Compare"
+			},
+			{
+				"id": "editorContextCompare",
+				"label": "Beyond Compare"
+			}
+		],
+		"menus": {
+			"editor/title/context": [
+				{
+					"submenu": "editorTitleContextCompare",
+					"when": "!sideBySideEditorActive && isFileSystemResource"
+				}
+			],
+			"editorTitleContextCompare": [
+				{
+					"command": "bcompare-vscode.selectLeft",
+					"group": "1LeftRight"
+				},
+				{
+					"command": "bcompare-vscode.compareWithLeft",
+					"group": "1LeftRight",
+					"when": "bcompare-vscode.leftSelected"
+				},
+				{
+					"command": "bcompare-vscode.compareWithFile",
+					"group": "2general@2"
+				},
+				{
+					"command": "bcompare-vscode.launchBC",
+					"group": "2general@5"
+				},
+				{
+					"command": "bcompare-vscode.compareParent",
+					"when": "resourceScheme === file",
+					"group": "2general@3"
+				},
+				{
+					"command": "bcompare-vscode.compareWithSave",
+					"when": "isFileSystemResource",
+					"group": "2general@1"
+				},
+				{
+					"command": "bcompare-vscode.compareFileToClipboard",
+					"group": "2general@4"
+				}
+			],
+			"explorer/context": [
+				{
+					"submenu": "explorerContextCompare",
+					"when": "listMultiSelection === false && !(resourceScheme === vscode-remote && explorerResourceIsFolder)"
+				},
+				{
+					"submenu": "explorerMultiContextCompare",
+					"when": "listMultiSelection"
+				}
+			],
+			"explorerMultiContextCompare": [
+				{
+					"command": "bcompare-vscode.compareSelected",
+					"when": "listDoubleSelection === true",
+					"group": "general@1"
+				},
+				{
+					"command": "bcompare-vscode.mergeSelected",
+					"when": "listDoubleSelection === false && false",
+					"group": "general@2"
+				},
+				{
+					"command": "bcompare-vscode.launchBC",
+					"group": "general@3"
+				}
+			],
+			"explorerContextCompare": [
+				{
+					"command": "bcompare-vscode.launchBC",
+					"group": "2general@4"
+				},
+				{
+					"command": "bcompare-vscode.compareParentExplorer",
+					"when": "explorerResourceIsFolder === false && resourceScheme === file",
+					"group": "2general@3"
+				},
+				{
+					"command": "bcompare-vscode.selectLeftExplorer",
+					"when": "explorerResourceIsFolder === false",
+					"group": "1LeftRight"
+				},
+				{
+					"command": "bcompare-vscode.compareWithLeftExplorer",
+					"when": "explorerResourceIsFolder === false && bcompare-vscode.leftSelected",
+					"group": "1LeftRight"
+				},
+				{
+					"command": "bcompare-vscode.compareWithFileExplorer",
+					"when": "explorerResourceIsFolder === false",
+					"group": "2general@1"
+				},
+				{
+					"command": "bcompare-vscode.selectLeftFolder",
+					"when": "explorerResourceIsFolder && resourceScheme !== vscode-remote",
+					"group": "1LeftRight"
+				},
+				{
+					"command": "bcompare-vscode.compareWithLeftFolder",
+					"when": "explorerResourceIsFolder && bcompare-vscode.leftFolderSelected && resourceScheme !== vscode-remote",
+					"group": "1LeftRight"
+				},
+				{
+					"command": "bcompare-vscode.compareWithFolder",
+					"when": "explorerResourceIsFolder && resourceScheme !== vscode-remote",
+					"group": "2general@2"
+				}
+			],
+			"editor/context": [
+				{
+					"submenu": "editorContextCompare",
+					"when": "editorHasSelection"
+				}
+			],
+			"editorContextCompare": [
+				{
+					"command": "bcompare-vscode.selectLeftText",
+					"when": "editorHasSelection",
+					"group": "LeftRight"
+				},
+				{
+					"command": "bcompare-vscode.compareWithLeftText",
+					"when": "bcompare-vscode.leftSelected && editorHasSelection",
+					"group": "LeftRight"
+				},
+				{
+					"command": "bcompare-vscode.compareTextToClipboard",
+					"when": "editorHasSelection"
+				}
+			],
+			"scm/resourceState/context": [
+				{
+					"command": "bcompare-vscode.gitCompare",
+					"when": "scmProvider == git && resourcePath =~ /./"
+				}
+			],
+			"editor/title": [
+				{
+					"command": "bcompare-vscode.openFromDiff",
+					"when": "isInDiffEditor",
+					"group": "navigation"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "bcompare-vscode.selectLeftFolder",
+					"when": "false"
+				},
+				{
+					"command": "bcompare-vscode.compareWithLeftFolder",
+					"when": "false"
+				},
+				{
+					"command": "bcompare-vscode.compareWithFolder",
+					"when": "false"
+				},
+				{
+					"command": "bcompare-vscode.compareWithSave",
+					"when": "editorFocus"
+				},
+				{
+					"command": "bcompare-vscode.gitCompare",
+					"when": "false"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "bcompare-vscode.launchBC",
+				"key": "alt+shift+b"
+			},
+			{
+				"command": "bcompare-vscode.selectLeft",
+				"key": "alt+shift+[",
+				"when": "editorFocus && !editorHasSelection"
+			},
+			{
+				"command": "bcompare-vscode.compareWithLeft",
+				"key": "alt+shift+]",
+				"when": "editorFocus && !editorHasSelection"
+			},
+			{
+				"command": "bcompare-vscode.selectLeftText",
+				"key": "alt+shift+[",
+				"when": "editorFocus && editorHasSelection"
+			},
+			{
+				"command": "bcompare-vscode.compareWithLeftText",
+				"key": "alt+shift+]",
+				"when": "editorFocus && editorHasSelection"
+			},
+			{
+				"command": "bcompare-vscode.compareParent",
+				"key": "alt+shift+6",
+				"when": "editorFocus"
+			},
+			{
+				"command": "bcompare-vscode.compareWithFile",
+				"key": "alt+shift+5",
+				"when": "editorFocus && !isInDiffEditor"
+			},
+			{
+				"command": "bcompare-vscode.openFromDiff",
+				"key": "alt+shift+5",
+				"when": "!filesExplorerFocus && isInDiffEditor"
+			},
+			{
+				"command": "bcompare-vscode.compareWithSave",
+				"key": "alt+shift+s",
+				"when": "editorFocus"
+			},
+			{
+				"command": "bcompare-vscode.compareFileToClipboard",
+				"key": "alt+shift+v",
+				"when": "editorFocus && !editorHasSelection"
+			},
+			{
+				"command": "bcompare-vscode.compareTextToClipboard",
+				"key": "alt+shift+v",
+				"when": "editorFocus && editorHasSelection"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/mocha": "^10.0.3",
+		"@types/node": "18.x",
+		"@types/vscode": "^1.83.0",
+		"@typescript-eslint/eslint-plugin": "^6.9.0",
+		"@typescript-eslint/parser": "^6.9.0",
+		"@vscode/test-electron": "^2.3.6",
+		"eslint": "^8.52.0",
+		"glob": "^10.3.10",
+		"mocha": "^10.2.0",
+		"typescript": "^5.2.2"
+	},
+	"dependencies": {
+		"@vscode/windows-registry": "^1.1.0",
+		"simple-git": "^3.21.0"
+	},
+	"__metadata": {
+		"id": "ee6f8a8d-2194-430a-bb92-b6b0d4d60a2b",
+		"publisherId": "fdc4f4a4-3df0-401e-a0e3-5ad63b14f9e6",
+		"publisherDisplayName": "Scooter Software",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"installedTimestamp": 1724792769200,
+		"pinned": false,
+		"preRelease": false,
+		"source": "gallery"
+	}
+}
